@@ -3,7 +3,14 @@ file(GLOB_RECURSE ENDF6_SRC
       "${SH_SRC}/*.hpp"
       "${SH_SRC}/*.cpp")
 
+if (PYRO_COMMON_SHARED_LIBRARY)
+add_compile_definitions(PYRO_COMMON_SHARED_LIBRARY=1)
 add_library(PyroCommon SHARED ${ENDF6_SRC})
+else()
+add_library(PyroCommon STATIC ${ENDF6_SRC})
+endif()
+
+add_library(Pyroshock::Common ALIAS PyroCommon)
 
 foreach(_source IN ITEMS ${ENDF6_SRC})
     get_filename_component(_source_path "${_source}" PATH)
@@ -16,7 +23,7 @@ target_link_libraries(PyroCommon PUBLIC EAStdC EASTL libassert::assert)
 
 target_include_directories(PyroCommon
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/PyroCommon/..>
         $<INSTALL_INTERFACE:include>
 )
 

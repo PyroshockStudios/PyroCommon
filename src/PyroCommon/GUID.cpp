@@ -1,11 +1,33 @@
+// MIT License
+//
+// Copyright (c) 2025 Pyroshock Studios
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 #include "GUID.hpp"
 #include <EASTL/string.h>
+#include <iomanip>
 #include <random>
 #include <sstream>
-#include <iomanip>
 
 namespace PyroshockStudios {
-    GUID::GUID() {
+    PYRO_COMMON_API GUID::GUID() noexcept {
         static std::random_device rd;
         static std::mt19937_64 gen(rd());
         static std::uniform_int_distribution<u32> dist;
@@ -25,7 +47,7 @@ namespace PyroshockStudios {
         mBytes[8] = (mBytes[8] & 0x3F) | 0x80;
     }
 
-    eastl::string GUID::ToString() const {
+    PYRO_COMMON_API eastl::string GUID::ToString() const noexcept {
         std::ostringstream oss;
         oss << std::hex << std::setfill('0');
         for (u8 i = 0; i < mBytes.size(); ++i) {
@@ -37,7 +59,7 @@ namespace PyroshockStudios {
         return eastl::string(oss.str().c_str());
     }
 
-    GUID GUID::FromString(const char* str) {
+    PYRO_COMMON_API GUID GUID::FromString(const char* str) {
         std::istringstream iss(str);
         std::string part;
         GUID guid;
@@ -52,4 +74,4 @@ namespace PyroshockStudios {
         return guid;
     }
 
-}
+} // namespace PyroshockStudios

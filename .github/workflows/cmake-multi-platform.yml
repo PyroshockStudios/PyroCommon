@@ -54,25 +54,10 @@ jobs:
         shell: bash
         run: |
           echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
-      - name: Enable MSVC multithreading
-        if: matrix.cpp_compiler == 'cl'
-        shell: pwsh
-        run: echo "CL=/MP" >> $env:GITHUB_ENV
-      - name: Install Dependencies
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libwayland-dev libxkbcommon-dev
       - name: Checkout repository with submodules
         uses: actions/checkout@v4
         with:
           submodules: recursive
-
-      - name: Prepare Vulkan SDK
-        uses: humbletim/setup-vulkan-sdk@v1.2.1
-        with:
-          vulkan-query-version: latest
-          vulkan-components: Vulkan-Headers, Vulkan-Loader
-          vulkan-use-cache: true
 
       # - name: Get Ninja
       #   uses: seanmiddleditch/gha-setup-ninja@master  
@@ -89,8 +74,7 @@ jobs:
           -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
           -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-          -DPYRO_BUILD_TESTS=ON
-          -DPYRO_WINDOWING_SYSTEM=GLFW
+          -DPYRO_COMMON_BUILD_TESTS=ON
           -S ${{ github.workspace }}
         # -G "Ninja Multi-Config"
         # -DCMAKE_C_COMPILER_LAUNCHER=ccache
@@ -122,7 +106,7 @@ jobs:
           submodules: recursive
 
       - name: Configure CMake
-        run: cmake -S . -B build -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release -DPYRO_BUILD_TESTS=OFF -DPYRO_BUILD_RHI_VULKAN=OFF -DPYRO_BUILD_RHI_METAL=OFF
+        run: cmake -S . -B build -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release -DPYRO_COMMON_BUILD_TESTS=ON
 
       - name: Build
         run: cmake --build build --config Release --parallel 4

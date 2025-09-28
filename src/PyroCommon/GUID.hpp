@@ -1,16 +1,38 @@
+// MIT License
+//
+// Copyright (c) 2025 Pyroshock Studios
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 #pragma once
 #include <EASTL/array.h>
 #include <EASTL/functional.h> // for eastl::hash
 #include <EASTL/string.h>
-#include <SWCommon/Core.hpp>
+#include <PyroCommon/Core.hpp>
 
 namespace PyroshockStudios {
-    class PYRO_COMMON_API GUID {
+    class GUID {
     public:
         using Container = eastl::array<u8, 16>;
 
         // automatically generates a random GUID
-        GUID();
+        PYRO_COMMON_API GUID() noexcept;
         constexpr explicit GUID(const Container& b) noexcept : mBytes(b) {}
         ~GUID() = default;
 
@@ -19,30 +41,30 @@ namespace PyroshockStudios {
         GUID(GUID&&) = default;
         GUID& operator=(GUID&&) = default;
 
-        PYRO_NODISCARD eastl::string ToString() const;
+        PYRO_COMMON_API PYRO_NODISCARD eastl::string ToString() const noexcept;
 
-        PYRO_NODISCARD static GUID FromString(const char* str);
-        PYRO_NODISCARD static GUID FromString(const eastl::string& str) {
+        PYRO_COMMON_API PYRO_NODISCARD static GUID FromString(const char* str);
+        PYRO_NODISCARD PYRO_FORCEINLINE static GUID FromString(const eastl::string& str) {
             return FromString(str.c_str());
         }
 
-        PYRO_NODISCARD static GUID Invalid() {
+        PYRO_NODISCARD PYRO_FORCEINLINE static GUID Invalid() noexcept {
             return GUID(Container{});
         }
 
-        PYRO_NODISCARD PYRO_FORCEINLINE bool operator==(const GUID& other) const {
+        PYRO_NODISCARD PYRO_FORCEINLINE bool operator==(const GUID& other) const noexcept {
             return mBytes == other.mBytes;
         }
-        PYRO_NODISCARD PYRO_FORCEINLINE bool operator!=(const GUID& other) const {
+        PYRO_NODISCARD PYRO_FORCEINLINE bool operator!=(const GUID& other) const noexcept {
             return !(*this == other);
         }
 
-        PYRO_NODISCARD PYRO_FORCEINLINE operator bool() const {
+        PYRO_NODISCARD PYRO_FORCEINLINE operator bool() const noexcept {
             return Valid();
         }
 
         // Returns false if the bytes are empty
-        PYRO_NODISCARD PYRO_FORCEINLINE bool Valid() const {
+        PYRO_NODISCARD PYRO_FORCEINLINE bool Valid() const noexcept {
             // must not be empty
             return mBytes != Container{};
         }
@@ -92,8 +114,8 @@ namespace PyroshockStudios {
                     (kStrBuf.data[dashes[2]] == '-') &&
                     (kStrBuf.data[dashes[3]] == '-'));
         }
-    }
-}
+    } // namespace internal
+} // namespace PyroshockStudios
 
 template <PyroshockStudios::internal::template_str_buffer kStrBuf>
 consteval PyroshockStudios::GUID operator""_guid() {
@@ -128,7 +150,7 @@ namespace eastl {
 
     template <>
     struct hash<PyroshockStudios::GUID> {
-        usize operator()(const PyroshockStudios::GUID& k) const {
+        PYRO_COMMON_API usize operator()(const PyroshockStudios::GUID& k) const noexcept {
             usize hash = 0;
             for (usize i = 0; i < 16; i += sizeof(usize)) {
                 usize chunk = 0;
@@ -141,4 +163,4 @@ namespace eastl {
             return hash;
         }
     };
-}
+} // namespace eastl

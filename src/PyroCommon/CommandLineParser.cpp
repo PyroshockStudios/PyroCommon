@@ -1,8 +1,30 @@
+// MIT License
+//
+// Copyright (c) 2025 Pyroshock Studios
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 #include "CommandLineParser.hpp"
 
 #include <EASTL/algorithm.h>
 
-#include <SWCommon/Platform.hpp>
+#include <PyroCommon/Platform.hpp>
 
 #ifdef PYRO_PLATFORM_WINDOWS
 #define PYRO_STR_TO_INT64 strtoll
@@ -11,12 +33,12 @@
 #endif
 namespace PyroshockStudios {
 
-    eastl::string CommandLineParser::GetOption(const eastl::string& key, const eastl::string& defaultValue) const {
+    PYRO_COMMON_API eastl::string CommandLineParser::GetOption(const eastl::string& key, const eastl::string& defaultValue) const {
         auto it = mOptions.find(key);
         return (it != mOptions.end()) ? it->second : defaultValue;
     }
 
-    i64 CommandLineParser::GetIntOption(const eastl::string& key, i64 defaultValue) const {
+    PYRO_COMMON_API i64 CommandLineParser::GetIntOption(const eastl::string& key, i64 defaultValue) const {
         auto it = mOptions.find(key);
         if (it != mOptions.end()) {
             const eastl::string& val = it->second;
@@ -29,7 +51,7 @@ namespace PyroshockStudios {
         return defaultValue;
     }
 
-    bool CommandLineParser::GetBoolOption(const eastl::string& key, bool defaultValue) const {
+    PYRO_COMMON_API bool CommandLineParser::GetBoolOption(const eastl::string& key, bool defaultValue) const {
         auto it = mOptions.find(key);
         if (it != mOptions.end()) {
             eastl::string val = it->second;
@@ -39,7 +61,7 @@ namespace PyroshockStudios {
         return defaultValue;
     }
 
-    eastl::vector<eastl::string> CommandLineParser::GetArrayOption(const eastl::string& key, const eastl::vector<eastl::string>& defaultValue) const {
+    PYRO_COMMON_API eastl::vector<eastl::string> CommandLineParser::GetArrayOption(const eastl::string& key, const eastl::vector<eastl::string>& defaultValue) const {
         auto it = mOptions.find(key);
         if (it != mOptions.end()) {
             const auto& input = it->second;
@@ -73,7 +95,7 @@ namespace PyroshockStudios {
         return defaultValue;
     }
 
-    bool CommandLineParser::HasOption(const eastl::string& key) const {
+    PYRO_COMMON_API bool CommandLineParser::HasOption(const eastl::string& key) const {
         return mOptions.find(key) != mOptions.end();
     }
 
@@ -115,4 +137,4 @@ namespace PyroshockStudios {
                 continue;
         }
     }
-}
+} // namespace PyroshockStudios
