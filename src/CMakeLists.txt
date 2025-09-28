@@ -10,7 +10,7 @@ else()
 add_library(PyroCommon STATIC ${ENDF6_SRC})
 endif()
 
-add_library(Pyroshock::Common ALIAS PyroCommon)
+add_library(PyroCommon::PyroCommon ALIAS PyroCommon)
 
 foreach(_source IN ITEMS ${ENDF6_SRC})
     get_filename_component(_source_path "${_source}" PATH)

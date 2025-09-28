@@ -46,7 +46,7 @@ set_target_properties(TestsCommon PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded
 gtest_discover_tests(TestsCommon)
 
 target_link_libraries(TestsCommon
-  Pyroshock::Common
+  PyroCommon::PyroCommon
   GTest::gmock
   GTest::gtest_main
   GTest::gmock_main
