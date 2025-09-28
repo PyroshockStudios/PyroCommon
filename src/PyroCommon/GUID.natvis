@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="PyroshockStudios::GUID">
+    
+    <!-- Display the GUID as a string in watch window -->
+    <DisplayString>{{ {mBytes[0]:02X}{mBytes[1]:02X}{mBytes[2]:02X}{mBytes[3]:02X}-{mBytes[4]:02X}{mBytes[5]:02X}-{mBytes[6]:02X}{mBytes[7]:02X}-{mBytes[8]:02X}{mBytes[9]:02X}-{mBytes[10]:02X}{mBytes[11]:02X}{mBytes[12]:02X}{mBytes[13]:02X}{mBytes[14]:02X}{mBytes[15]:02X} }}</DisplayString>
+    
+    <Expand>
+      <Item Name="Valid">mBytes[0] | mBytes[1] | mBytes[2] | mBytes[3] | mBytes[4] | mBytes[5] | mBytes[6] | mBytes[7] | mBytes[8] | mBytes[9] | mBytes[10] | mBytes[11] | mBytes[12] | mBytes[13] | mBytes[14] | mBytes[15]</Item>
+      <ArrayItems>
+        <Size>16</Size>
+        <ValuePointer>mBytes</ValuePointer>
+      </ArrayItems>
+    </Expand>
+
+  </Type>
+</AutoVisualizer>

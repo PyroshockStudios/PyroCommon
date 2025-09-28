@@ -1,0 +1,96 @@
+#pragma once
+#include <EASTL/vector.h>
+#include <EASTL/string.h>
+#include <SWCommon/Types.hpp>
+
+namespace PyroshockStudios {
+    inline namespace Util {
+        eastl::vector<eastl::string> StringSplit(const eastl::string& input, char delimiter) {
+            eastl::vector<eastl::string> result;
+            usize start = 0;
+            usize pos = 0;
+
+            while ((pos = input.find(delimiter, start)) != eastl::string::npos) {
+                result.push_back(input.substr(start, pos - start));
+                start = pos + 1;
+            }
+
+            // Add the last segment
+            if (start <= input.size()) {
+                result.push_back(input.substr(start));
+            }
+
+            return result;
+        }
+        eastl::vector<eastl::string> StringSplit(const eastl::string& input, char delimiter, char quote, char escapeMarker = '\\') {
+            eastl::vector<eastl::string> tokens;
+            eastl::string current;
+            bool inQuotes = false;
+            char quoteChar = '\0';
+
+            for (size_t i = 0; i < input.size(); ++i) {
+                char c = input[i];
+
+                // Handle backslash escapes
+                if (c == escapeMarker) {
+                    if (i + 1 < input.size()) {
+                        char nxt = input[i + 1];
+
+                        // If we're in quotes: allow escaping the current quote or a backslash
+                        if (inQuotes && (nxt == quoteChar || nxt == escapeMarker)) {
+                            current.push_back(nxt); // add the escaped char, drop the backslash
+                            ++i;
+                            continue;
+                        }
+
+                        // If we're not in quotes: allow escaping quotes so they remain literal,
+                        // without toggling quoted mode. Also allow escaping backslash.
+                        if (!inQuotes && (nxt == quote || nxt == escapeMarker)) {
+                            current.push_back(nxt);
+                            ++i;
+                            continue;
+                        }
+                    }
+
+                    // Otherwise keep the backslash as-is
+                    current.push_back(c);
+                    continue;
+                }
+
+                // Handle quote chars
+                if (c == quote) {
+                    if (!inQuotes) {
+                        inQuotes = true;
+                        quoteChar = c;
+                        current.push_back(c); // keep opening quote
+                    } else if (c == quoteChar) {
+                        inQuotes = false;
+                        quoteChar = '\0';
+                        current.push_back(c); // keep closing quote
+                    } else {
+                        current.push_back(c); // different quote inside quoted string
+                    }
+                    continue;
+                }
+
+                // Split on delimiter only when not inside quotes
+                if (c == delimiter && !inQuotes) {
+                    if (!current.empty()) {
+                        tokens.push_back(current);
+                        current.clear();
+                    }
+                    continue;
+                }
+
+                // Regular character
+                current.push_back(c);
+            }
+
+            if (!current.empty()) {
+                tokens.push_back(current);
+            }
+
+            return tokens;
+        }
+    }
+}
