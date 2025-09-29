@@ -23,36 +23,10 @@
 #pragma once
 #include <EASTL/string.h>
 #include <PyroCommon/Core.hpp>
+#include <PyroCommon/LoggerInterface.hpp>
 #include <fmt/format.h>
 
 namespace PyroshockStudios {
-    enum class LogSeverity {
-        Verbose = 0,
-        Debug = 1,
-        Trace = 2,
-        Info = 3,
-        Warn = 4,
-        Error = 5,
-        Fatal = 6
-    };
-
-    struct ILogStream {
-        ILogStream() = default;
-        ~ILogStream() = default;
-
-        virtual void Log(LogSeverity severity, const char* message) const = 0;
-        virtual LogSeverity MinSeverity() const = 0;
-        virtual const char* Name() const = 0;
-    };
-	
-    struct ILoggerAware {
-        ILoggerAware() = default;
-        ~ILoggerAware() = default;
-
-        virtual void InjectLogger(const ILogStream* stream) const = 0;
-    };
-
-
     class Logger {
     public:
         template <typename... Args>
