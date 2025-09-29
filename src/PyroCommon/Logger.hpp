@@ -38,23 +38,23 @@ namespace PyroshockStudios {
 
         template <typename... Args>
         PYRO_FORCEINLINE static void Trace(const ILogStream* stream, const eastl::string& str, Args... args) {
-            LogFmt(LogSeverity::Trace, stream, src, eastl::forward<Args>(args));
+            LogFmt(LogSeverity::Trace, stream, str, eastl::forward<Args>(args));
         }
         template <typename... Args>
         PYRO_FORCEINLINE static void Info(const ILogStream* stream, const eastl::string& str, Args... args) {
-            LogFmt(LogSeverity::Info, stream, src, eastl::forward<Args>(args));
+            LogFmt(LogSeverity::Info, stream, str, eastl::forward<Args>(args));
         }
         template <typename... Args>
         PYRO_FORCEINLINE static void Warn(const ILogStream* stream, const eastl::string& str, Args... args) {
-            LogFmt(LogSeverity::Warn, stream, src, eastl::forward<Args>(args));
+            LogFmt(LogSeverity::Warn, stream, str, eastl::forward<Args>(args));
         }
         template <typename... Args>
         PYRO_FORCEINLINE static void Error(const ILogStream* stream, const eastl::string& str, Args... args) {
-            LogFmt(LogSeverity::Error, stream, src, eastl::forward<Args>(args));
+            LogFmt(LogSeverity::Error, stream, str, eastl::forward<Args>(args));
         }
         template <typename... Args>
         PYRO_FORCEINLINE static void Fatal(const ILogStream* stream, const eastl::string& str, Args... args) {
-            LogFmt(LogSeverity::Fatal, stream, src, eastl::forward<Args>(args));
+            LogFmt(LogSeverity::Fatal, stream, str, eastl::forward<Args>(args));
         }
     };
 } // namespace PyroshockStudios
