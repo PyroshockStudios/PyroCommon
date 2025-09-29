@@ -31,31 +31,32 @@ namespace PyroshockStudios {
     class Logger {
     public:
         template <typename... Args>
-        PYRO_FORCEINLINE static void LogFmt(LogSeverity severity, const ILogStream* stream, const eastl::string& str, Args... args) {
-			if (stream == nullptr || severity < stream->MinSeverity()) return;
-            auto result = fmt::format(str, eastl::forward<Args>(args)...);
+        PYRO_FORCEINLINE static void LogFmt(LogSeverity severity, const ILogStream* stream, eastl::string_view str, Args&&... args) {
+            if (!stream || severity < stream->MinSeverity())
+                return;
+            auto result = fmt::format(fmt::runtime(str.data()), std::forward<Args>(args)...);
             stream->Log(severity, result.c_str());
         }
 
         template <typename... Args>
-        PYRO_FORCEINLINE static void Trace(const ILogStream* stream, const eastl::string& str, Args... args) {
-            LogFmt(LogSeverity::Trace, stream, str, eastl::forward<Args>(args)...);
+        PYRO_FORCEINLINE static void Trace(const ILogStream* stream, eastl::string_view str, Args&&... args) {
+            LogFmt(LogSeverity::Trace, stream, str, std::forward<Args>(args)...);
         }
         template <typename... Args>
-        PYRO_FORCEINLINE static void Info(const ILogStream* stream, const eastl::string& str, Args... args) {
-            LogFmt(LogSeverity::Info, stream, str, eastl::forward<Args>(args)...);
+        PYRO_FORCEINLINE static void Info(const ILogStream* stream, eastl::string_view str, Args&&... args) {
+            LogFmt(LogSeverity::Info, stream, str, std::forward<Args>(args)...);
         }
         template <typename... Args>
-        PYRO_FORCEINLINE static void Warn(const ILogStream* stream, const eastl::string& str, Args... args) {
-            LogFmt(LogSeverity::Warn, stream, str, eastl::forward<Args>(args)...);
+        PYRO_FORCEINLINE static void Warn(const ILogStream* stream, eastl::string_view str, Args&&... args) {
+            LogFmt(LogSeverity::Warn, stream, str, std::forward<Args>(args)...);
         }
         template <typename... Args>
-        PYRO_FORCEINLINE static void Error(const ILogStream* stream, const eastl::string& str, Args... args) {
-            LogFmt(LogSeverity::Error, stream, str, eastl::forward<Args>(args)...);
+        PYRO_FORCEINLINE static void Error(const ILogStream* stream, eastl::string_view str, Args&&... args) {
+            LogFmt(LogSeverity::Error, stream, str, std::forward<Args>(args)...);
         }
         template <typename... Args>
-        PYRO_FORCEINLINE static void Fatal(const ILogStream* stream, const eastl::string& str, Args... args) {
-            LogFmt(LogSeverity::Fatal, stream, str, eastl::forward<Args>(args)...);
+        PYRO_FORCEINLINE static void Fatal(const ILogStream* stream, eastl::string_view str, Args&&... args) {
+            LogFmt(LogSeverity::Fatal, stream, str, std::forward<Args>(args)...);
         }
     };
 } // namespace PyroshockStudios
