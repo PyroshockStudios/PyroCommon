@@ -4,8 +4,8 @@ file(GLOB_RECURSE ENDF6_SRC
       "${SH_SRC}/*.cpp")
 
 if (PYRO_COMMON_SHARED_LIBRARY)
-add_compile_definitions(PYRO_COMMON_SHARED_LIBRARY=1)
 add_library(PyroCommon SHARED ${ENDF6_SRC})
+target_compile_definitions(PyroCommon PUBLIC PYRO_COMMON_SHARED_LIBRARY=1)
 else()
 add_library(PyroCommon STATIC ${ENDF6_SRC})
 endif()
