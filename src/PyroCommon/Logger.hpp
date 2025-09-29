@@ -27,7 +27,7 @@
 
 namespace PyroshockStudios {
     enum class LogSeverity {
-        Verbose = 1,
+        Verbose = 0,
         Debug = 1,
         Trace = 2,
         Info = 3,
@@ -40,15 +40,24 @@ namespace PyroshockStudios {
         ILogStream() = default;
         ~ILogStream() = default;
 
-        virtual void Log(LogSeverity severify, const char* message) const = 0;
+        virtual void Log(LogSeverity severity, const char* message) const = 0;
+        virtual LogSeverity MinSeverity() const = 0;
         virtual const char* Name() const = 0;
+    };
+	
+    struct ILoggerAware {
+        ILoggerAware() = default;
+        ~ILoggerAware() = default;
+
+        virtual void InjectLogger(const ILogStream* stream) const = 0;
     };
 
 
     class Logger {
     public:
         template <typename... Args>
-        PYRO_FORCEINLINE static void LogFmt(const ILogStream* stream, LogSeverity severity, const eastl::string& str, Args... args) {
+        PYRO_FORCEINLINE static void LogFmt(LogSeverity severity, const ILogStream* stream, const eastl::string& str, Args... args) {
+			if (stream == nullptr || severity < stream->MinSeverity()) return;
             auto result = fmt::format(str, eastl::forward<Args>(args)...);
             stream->Log(severity, result.c_str());
         }
