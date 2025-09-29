@@ -19,7 +19,10 @@ foreach(_source IN ITEMS ${ENDF6_SRC})
     source_group("${_group_path}" FILES "${_source}")
 endforeach()
 
-target_link_libraries(PyroCommon PUBLIC EAStdC EASTL libassert::assert)
+target_link_libraries(PyroCommon PUBLIC 
+   EAStdC EASTL libassert::assert
+   fmt::fmt 
+)
 
 target_include_directories(PyroCommon
     PUBLIC

@@ -19,3 +19,6 @@ add_subdirectory(snmalloc)
 
 # libassert
 add_subdirectory(libassert)
+
+# fmt format
+add_subdirectory(fmt)

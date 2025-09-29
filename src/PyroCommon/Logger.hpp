@@ -22,22 +22,56 @@
 
 #pragma once
 #include <EASTL/string.h>
-#include <cstdio>
+#include <PyroCommon/Core.hpp>
+#include <fmt/format.h>
+
 namespace PyroshockStudios {
+    enum class LogSeverity {
+        Verbose = 1,
+        Debug = 1,
+        Trace = 2,
+        Info = 3,
+        Warn = 4,
+        Error = 5,
+        Fatal = 6
+    };
+
+    struct ILogStream {
+        ILogStream() = default;
+        ~ILogStream() = default;
+
+        virtual void Log(LogSeverity severify, const char* message) const = 0;
+        virtual const char* Name() const = 0;
+    };
+
+
     class Logger {
     public:
         template <typename... Args>
-        static void Trace(const eastl::string& str, Args... args) { printf("[TRACE] %s\n", str.c_str()); }
+        PYRO_FORCEINLINE static void LogFmt(const ILogStream* stream, LogSeverity severity, const eastl::string& str, Args... args) {
+            auto result = fmt::format(str, eastl::forward<Args>(args)...);
+            stream->Log(severity, result.c_str());
+        }
+
         template <typename... Args>
-        static void Warn(const eastl::string& str, Args... args) { printf("[WARN] %s\n", str.c_str()); }
+        PYRO_FORCEINLINE static void Trace(const ILogStream* stream, const eastl::string& str, Args... args) {
+            LogFmt(LogSeverity::Trace, stream, src, eastl::forward<Args>(args));
+        }
         template <typename... Args>
-        static void Info(const eastl::string& str, Args... args) { printf("[INFO] %s\n", str.c_str()); }
+        PYRO_FORCEINLINE static void Info(const ILogStream* stream, const eastl::string& str, Args... args) {
+            LogFmt(LogSeverity::Info, stream, src, eastl::forward<Args>(args));
+        }
         template <typename... Args>
-        static void Error(const eastl::string& str, Args... args) { printf("[ERROR] %s\n", str.c_str()); }
+        PYRO_FORCEINLINE static void Warn(const ILogStream* stream, const eastl::string& str, Args... args) {
+            LogFmt(LogSeverity::Warn, stream, src, eastl::forward<Args>(args));
+        }
         template <typename... Args>
-        static void Fatal(const eastl::string& str, Args... args) {
-            printf("[FATAL] %s\n", str.c_str());
-            abort();
+        PYRO_FORCEINLINE static void Error(const ILogStream* stream, const eastl::string& str, Args... args) {
+            LogFmt(LogSeverity::Error, stream, src, eastl::forward<Args>(args));
+        }
+        template <typename... Args>
+        PYRO_FORCEINLINE static void Fatal(const ILogStream* stream, const eastl::string& str, Args... args) {
+            LogFmt(LogSeverity::Fatal, stream, src, eastl::forward<Args>(args));
         }
     };
 } // namespace PyroshockStudios

@@ -19,3 +19,6 @@
 [submodule "vendor/EASTL"]
 	path = vendor/EASTL
 	url = https://github.com/PyroshockStudios/EASTL.git
+[submodule "vendor/fmt"]
+	path = vendor/fmt
+	url = https://github.com/fmtlib/fmt.git
