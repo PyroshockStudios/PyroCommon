@@ -47,6 +47,6 @@ namespace PyroshockStudios {
         ILoggerAware() = default;
         ~ILoggerAware() = default;
 
-        virtual void InjectLogger(const ILogStream* stream) const = 0;
+        virtual void InjectLogger(const ILogStream* stream) = 0;
     };
 } // namespace PyroshockStudios
