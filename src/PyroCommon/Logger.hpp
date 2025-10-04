@@ -39,6 +39,10 @@ namespace PyroshockStudios {
         }
 
         template <typename... Args>
+        PYRO_FORCEINLINE static void Debug(const ILogStream* stream, eastl::string_view str, Args&&... args) {
+            LogFmt(LogSeverity::Debug, stream, str, std::forward<Args>(args)...);
+        }
+        template <typename... Args>
         PYRO_FORCEINLINE static void Trace(const ILogStream* stream, eastl::string_view str, Args&&... args) {
             LogFmt(LogSeverity::Trace, stream, str, std::forward<Args>(args)...);
         }
