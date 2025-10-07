@@ -22,6 +22,7 @@
 
 #pragma once
 #include <EASTL/type_traits.h>
+#include <EASTL/internal/move_help.h>
 
 namespace PyroshockStudios {
     template <typename From, typename To>
