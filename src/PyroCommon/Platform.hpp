@@ -58,8 +58,17 @@
 #endif
 
 #if defined(__APPLE__)
+#include <TargetConditionals.h>
+
 #define PYRO_PLATFORM_FAMILY_UNIX 1
+#define PYRO_PLATFORM_FAMILY_APPLE 1
+
+#if defined(TARGET_OS_OSX)
 #define PYRO_PLATFORM_MACOS 1
+#elif defined(TARGET_OS_IOS)
+#define PYRO_PLATFORM_IOS 1
+#endif
+
 #endif
 
 

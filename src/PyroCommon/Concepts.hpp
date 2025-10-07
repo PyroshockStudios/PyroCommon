@@ -26,8 +26,8 @@
 namespace PyroshockStudios {
     template <typename From, typename To>
     concept ConvertibleTo =
-        requires {
-            static_cast<To>(eastl::declval<From>());
+        requires(From f) {
+            static_cast<To>(f);
         };
 
     template <typename T>
@@ -48,9 +48,7 @@ namespace PyroshockStudios {
 
     template <typename T>
     concept CopyMoveableConcept =
-        requires {
-            CopyableConcept<T>&& MoveableConcept<T>;
-        };
+        CopyableConcept<T> && MoveableConcept<T>;
 
     template <typename T>
     concept IterableConcept =
@@ -61,16 +59,19 @@ namespace PyroshockStudios {
 
     template <typename T>
     concept CollectionConcept =
+        IterableConcept<T> &&
         requires(const T& t) {
-            requires IterableConcept<T>;
             t.size();
         };
 
     template <typename C>
-    concept ContiguousCollectionConcept = requires(C& c) {
-        { c.data() } -> ConvertibleTo<typename eastl::add_pointer_t<eastl::remove_reference_t<decltype(*c.data())>>>;
-        { c.size() } -> ConvertibleTo<size_t>;
-    };
+    concept ContiguousCollectionConcept =
+        requires(C& c) {
+            { c.data() } -> ConvertibleTo<typename eastl::add_pointer_t<
+                eastl::remove_reference_t<decltype(*c.data())>>>;
+            { c.size() } -> ConvertibleTo<size_t>;
+        };
+
     template <typename T>
     concept MapConcept =
         requires(const T& t) {
@@ -97,9 +98,9 @@ namespace PyroshockStudios {
         c.push_back(v);
     };
 
-    template <typename C>
-    concept EmplaceBackableConcept = requires(C& c, eastl::remove_cvref_t<decltype(*c.begin())> v) {
-        c.push_back(v);
+    template <typename C, typename... Args>
+    concept EmplaceBackableConcept = requires(C& c, Args&&... args) {
+        c.emplace_back(eastl::forward<Args>(args)...);
     };
 
     template <typename T>

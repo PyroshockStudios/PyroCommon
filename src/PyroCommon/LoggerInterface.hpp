@@ -38,7 +38,7 @@ namespace PyroshockStudios {
         ILogStream() = default;
         ~ILogStream() = default;
 
-        virtual void Log(LogSeverity severity, const char* message) const = 0;
+        virtual void Log(LogSeverity severity, const char* message) = 0;
         virtual LogSeverity MinSeverity() const = 0;
         virtual const char* Name() const = 0;
     };
@@ -47,6 +47,6 @@ namespace PyroshockStudios {
         ILoggerAware() = default;
         ~ILoggerAware() = default;
 
-        virtual void InjectLogger(const ILogStream* stream) = 0;
+        virtual void InjectLogger(ILogStream* stream) = 0;
     };
 } // namespace PyroshockStudios
