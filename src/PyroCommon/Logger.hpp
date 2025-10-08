@@ -21,8 +21,8 @@
 // SOFTWARE.
 
 #pragma once
-#include <EASTL/string.h>
 #include <EASTL/internal/move_help.h>
+#include <EASTL/string.h>
 #include <PyroCommon/Core.hpp>
 #include <PyroCommon/LoggerInterface.hpp>
 #include <fmt/format.h>
@@ -31,7 +31,7 @@ namespace PyroshockStudios {
     class Logger {
     public:
         template <typename... Args>
-        PYRO_FORCEINLINE static void LogFmt(LogSeverity severity, const ILogStream* stream, eastl::string_view str, Args&&... args) {
+        PYRO_FORCEINLINE static void LogFmt(LogSeverity severity, ILogStream* stream, eastl::string_view str, Args&&... args) {
             if (!stream || severity < stream->MinSeverity())
                 return;
             auto result = fmt::format(fmt::runtime(str.data()), std::forward<Args>(args)...);
@@ -39,27 +39,33 @@ namespace PyroshockStudios {
         }
 
         template <typename... Args>
-        PYRO_FORCEINLINE static void Debug(const ILogStream* stream, eastl::string_view str, Args&&... args) {
+        PYRO_FORCEINLINE static void Verbose(ILogStream* stream, eastl::string_view str, Args&&... args) {
+#ifndef PYRO_COMMON_DISABLE_VERBOSE_LOGGING
+            LogFmt(LogSeverity::Verbose, stream, str, std::forward<Args>(args)...);
+#endif
+        }
+        template <typename... Args>
+        PYRO_FORCEINLINE static void Debug(ILogStream* stream, eastl::string_view str, Args&&... args) {
             LogFmt(LogSeverity::Debug, stream, str, std::forward<Args>(args)...);
         }
         template <typename... Args>
-        PYRO_FORCEINLINE static void Trace(const ILogStream* stream, eastl::string_view str, Args&&... args) {
+        PYRO_FORCEINLINE static void Trace(ILogStream* stream, eastl::string_view str, Args&&... args) {
             LogFmt(LogSeverity::Trace, stream, str, std::forward<Args>(args)...);
         }
         template <typename... Args>
-        PYRO_FORCEINLINE static void Info(const ILogStream* stream, eastl::string_view str, Args&&... args) {
+        PYRO_FORCEINLINE static void Info(ILogStream* stream, eastl::string_view str, Args&&... args) {
             LogFmt(LogSeverity::Info, stream, str, std::forward<Args>(args)...);
         }
         template <typename... Args>
-        PYRO_FORCEINLINE static void Warn(const ILogStream* stream, eastl::string_view str, Args&&... args) {
+        PYRO_FORCEINLINE static void Warn(ILogStream* stream, eastl::string_view str, Args&&... args) {
             LogFmt(LogSeverity::Warn, stream, str, std::forward<Args>(args)...);
         }
         template <typename... Args>
-        PYRO_FORCEINLINE static void Error(const ILogStream* stream, eastl::string_view str, Args&&... args) {
+        PYRO_FORCEINLINE static void Error(ILogStream* stream, eastl::string_view str, Args&&... args) {
             LogFmt(LogSeverity::Error, stream, str, std::forward<Args>(args)...);
         }
         template <typename... Args>
-        PYRO_FORCEINLINE static void Fatal(const ILogStream* stream, eastl::string_view str, Args&&... args) {
+        PYRO_FORCEINLINE static void Fatal(ILogStream* stream, eastl::string_view str, Args&&... args) {
             LogFmt(LogSeverity::Fatal, stream, str, std::forward<Args>(args)...);
         }
     };
