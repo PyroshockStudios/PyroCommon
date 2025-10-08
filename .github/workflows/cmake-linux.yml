@@ -1,24 +1,30 @@
 name: Linux Build (GCC & Clang)
-
-on:
-  workflow_call:
-    inputs:
-      compiler:
-        required: true
-        type: string
-      build_type:
-        required: true
-        type: string
-      shared:
-        required: true
-        type: string
-
 permissions:
   contents: read
+  
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "master" ]
 
 jobs:
   build-linux:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]
+        build_type: [Release]
+        shared: [ON, OFF]
+        include:
+          - compiler: gcc
+            c: gcc
+            cxx: g++
+          - compiler: clang
+            c: clang
+            cxx: clang++
+
     steps:
       - name: Checkout repository with submodules
         uses: actions/checkout@v4
@@ -28,26 +34,26 @@ jobs:
       - name: Install compilers
         run: |
           sudo apt-get update
-          if [[ "${{ inputs.compiler }}" == "clang" ]]; then
+          if [[ "${{ matrix.compiler }}" == "clang" ]]; then
             sudo apt-get install -y clang
           else
             sudo apt-get install -y build-essential
           fi
 
       - name: Configure CMake (Linux)
-        run: |
+        run: >
           cmake -B build
           -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-          -DCMAKE_C_COMPILER=${{ inputs.compiler }}
-          -DCMAKE_CXX_COMPILER=${{ inputs.compiler }}++
-          -DCMAKE_BUILD_TYPE=${{ inputs.build_type }}
+          -DCMAKE_C_COMPILER=${{ matrix.c }}
+          -DCMAKE_CXX_COMPILER=${{ matrix.cxx }}
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
           -DPYRO_COMMON_BUILD_TESTS=ON
-          -DPYRO_COMMON_SHARED_LIBRARY=${{ inputs.shared }}
+          -DPYRO_COMMON_SHARED_LIBRARY=${{ matrix.shared }}
           -S .
 
       - name: Build (Linux)
-        run: cmake --build build --config ${{ inputs.build_type }} --parallel 4
+        run: cmake --build build --config ${{ matrix.build_type }} --parallel 4
 
       - name: Run tests
         working-directory: build
-        run: ctest --build-config ${{ inputs.build_type }}
+        run: ctest --build-config ${{ matrix.build_type }}

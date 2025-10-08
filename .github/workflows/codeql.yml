@@ -33,23 +33,6 @@ jobs:
           languages: ${{ matrix.language }}
           build-mode: manual
 
-      # Call Linux build workflow for CodeQL
-      - name: Build project (GCC)
-        if: matrix.language == 'c-cpp'
-        uses: ./.github/workflows/build-linux.yml
-        with:
-          compiler: gcc
-          build_type: Release
-          shared: OFF
-
-      - name: Build project (Clang)
-        if: matrix.language == 'c-cpp'
-        uses: ./.github/workflows/build-linux.yml
-        with:
-          compiler: clang
-          build_type: Release
-          shared: OFF
-
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
