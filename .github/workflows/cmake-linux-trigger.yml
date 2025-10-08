@@ -1,0 +1,27 @@
+name: Linux Build Trigger
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build-linux-gcc:
+    name: Build Linux (GCC)
+    uses: ./.github/workflows/build-linux.yml
+    with:
+      compiler: gcc
+      build_type: Release
+      shared: OFF
+
+  build-linux-clang:
+    name: Build Linux (Clang)
+    uses: ./.github/workflows/build-linux.yml
+    with:
+      compiler: clang
+      build_type: Release
+      shared: OFF
