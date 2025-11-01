@@ -23,7 +23,7 @@
 #pragma once
 #include "HashCombine.hpp"
 #include <PyroCommon/Types.hpp>
-#include <eastl/utility.h>
+#include <EASTL/utility.h>
 
 namespace PyroshockStudios {
     inline namespace Util {

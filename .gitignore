@@ -420,6 +420,7 @@ cmake/
 CTestTestfile.cmake
 Testing/Temporary/
 build/
+.vscode/
 
 /.idea/.gitignore
 /.idea/codeStyles/codeStyleConfig.xml
