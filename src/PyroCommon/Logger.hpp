@@ -34,7 +34,7 @@ namespace PyroshockStudios {
         PYRO_FORCEINLINE static void LogFmt(LogSeverity severity, ILogStream* stream, eastl::string_view str, Args&&... args) {
             if (!stream || severity < stream->MinSeverity())
                 return;
-            auto result = fmt::format(fmt::runtime(str.data()), std::forward<Args>(args)...);
+            auto result = fmt::format(fmt::runtime(str), std::forward<Args>(args)...);
             stream->Log(severity, result.c_str());
         }
 
