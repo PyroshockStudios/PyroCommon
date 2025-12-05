@@ -26,7 +26,7 @@
 
 #include <EASTL/string.h>
 
-#ifdef PYRO_PLATFORM_FAMILY_WINDOWS
+#if defined(PYRO_PLATFORM_FAMILY_WINDOWS)
 typedef void* HANDLE;
 #endif
 namespace PyroshockStudios {
@@ -61,10 +61,10 @@ namespace PyroshockStudios {
     private:
         usize mSeekPos = 0;
 
-#ifdef PYRO_PLATFORM_FAMILY_WINDOWS
+#if defined(PYRO_PLATFORM_FAMILY_WINDOWS)
         HANDLE mHandle = {};
-#elifdef PYRO_PLATFORM_FAMILY_UNIX
-        int mHandle = {};
+#elif defined(PYRO_PLATFORM_FAMILY_UNIX)
+        int mFd = {};
 #else
 #endif
     };
