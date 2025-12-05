@@ -21,18 +21,32 @@
 // SOFTWARE.
 
 #pragma once
-#include "IStreamBase.hpp"
+#include <PyroCommon/Core.hpp>
 namespace PyroshockStudios {
-    struct IStreamWriter : public IStreamBase {
-        IStreamWriter() = default;
-        virtual ~IStreamWriter() = default;
+    enum struct StreamOrigin : i32 {
+        Start,
+        End,
+        Current
+    };
+    struct IStreamBase {
+        IStreamBase() = default;
+        virtual ~IStreamBase() = default;
 
-        /// @brief Allocates another number of bytes
-        /// @return True if the operation was successful
-        PYRO_NODISCARD virtual bool Resize(usize bytes) = 0;
+        /// Seeks to a point in a previously opened file.
+        /// @param offset The number of bytes to seek.
+        /// @param origin Seek origin
+        /// @return True if the operation completed successfully, false otherwise.
+        PYRO_NODISCARD virtual bool Seek(isize offset, StreamOrigin origin) = 0;
 
-        /// @brief Allocate bytes and advance
-        /// @return Amount of bytes written
-        PYRO_NODISCARD virtual usize Write(const void* in, usize size) = 0;
+        /// Returns the current position of the file pointer.
+        /// @param file The handle of the file to be queried.
+        /// @return The number of bytes from the origin of the file.
+        PYRO_NODISCARD virtual size_t Tell() = 0;
+
+        /// Returns the length of the file.
+        /// The default implementation uses Seek & Tell.
+        /// @param file The handle of the file to be queried.
+        /// @return The length of the file in bytes.
+        PYRO_NODISCARD virtual usize Length() = 0;
     };
 } // namespace PyroshockStudios

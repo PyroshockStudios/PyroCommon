@@ -27,10 +27,10 @@ namespace PyroshockStudios {
     PYRO_COMMON_API BinarySerializer::BinarySerializer(IStreamReader* reader, IStreamWriter* writer) : mReader(reader), mWriter(writer) {}
     PYRO_COMMON_API void BinarySerializer::Write(const void* bytes, usize size) {
         ASSERT(mWriter != nullptr, "Stream Writer has not been set!");
-        mWriter->Write(bytes, size);
+        usize written = mWriter->Write(bytes, size);
     }
     PYRO_COMMON_API void BinarySerializer::Read(void* out, usize size) {
         ASSERT(mReader != nullptr, "Stream Reader has not been set!");
-        mReader->Read(out, size);
+        usize read = mReader->Read(out, size);
     }
 } // namespace PyroshockStudios

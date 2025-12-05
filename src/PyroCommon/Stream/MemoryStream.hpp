@@ -27,7 +27,6 @@
 
 #include <EASTL/span.h>
 #include <EASTL/vector.h>
-#include <stdexcept>
 #include <string.h>
 
 namespace PyroshockStudios {
@@ -36,41 +35,17 @@ namespace PyroshockStudios {
         MemoryStream() = default;
         ~MemoryStream() = default;
 
-        void Write(const void* bytes, usize size) override {
-            const u8* src = static_cast<const u8*>(bytes);
-            mBuffer.insert(mBuffer.end(), src, src + size);
-            mPosition += size;
-        }
+        
+        PYRO_NODISCARD bool Seek(isize offset, StreamOrigin origin) override;
+        PYRO_NODISCARD usize Length() override;
+        PYRO_NODISCARD usize Tell() override;
 
-        void Read(void* out, usize size) override {
-            if (mPosition + size > mBuffer.size()) {
-                throw std::runtime_error("Buffer underflow");
-            }
-            memcpy(out, mBuffer.data() + mPosition, size);
-            mPosition += size;
-        }
+        PYRO_NODISCARD bool Resize(usize bytes) override;
+        PYRO_NODISCARD usize Write(const void* bytes, usize size) override;
 
-        void ReadToEnd(void* out) override {
-            usize remaining = StreamSize() - mPosition;
-            Read(out, remaining);
-        }
+        PYRO_NODISCARD usize Read(void* out, usize size) override;
 
-        usize StreamSize() override {
-            return mBuffer.size();
-        }
-
-        bool IsEndOfStream() override {
-            return mPosition >= mBuffer.size();
-        }
-
-        void Seek(usize position) {
-            if (position > mBuffer.size()) {
-                throw std::runtime_error("Buffer overflow");
-            }
-            mPosition = position;
-        }
-
-        eastl::span<const u8> Span() const { return { mBuffer.data(), mBuffer.size() }; }
+        PYRO_NODISCARD eastl::span<const u8> Span() const;
 
     private:
         eastl::vector<u8> mBuffer;

@@ -63,7 +63,7 @@ protected:
 TEST_F(TestBinarySerializer, PodRoundTrip_Int) {
     int32_t in = 123456;
     serializer << in;
-    mem.Seek(0);
+    mem.Seek(0, StreamOrigin::Start);
     int32_t out = 0;
     serializer >> out;
 
@@ -73,7 +73,7 @@ TEST_F(TestBinarySerializer, PodRoundTrip_Int) {
 TEST_F(TestBinarySerializer, VectorRoundTrip_POD) {
     eastl::vector<uint32_t> in = { 1, 2, 3, 4, 5 };
     serializer << in;
-    mem.Seek(0);
+    mem.Seek(0, StreamOrigin::Start);
 
     eastl::vector<uint32_t> out;
     serializer >> out;
@@ -84,7 +84,7 @@ TEST_F(TestBinarySerializer, VectorRoundTrip_POD) {
 TEST_F(TestBinarySerializer, VectorRoundTrip_Serializable) {
     eastl::vector<MyStruct> in = { { 1, 1.5f }, { 2, 2.5f }, { 3, 3.5f } };
     serializer << in;
-    mem.Seek(0);
+    mem.Seek(0, StreamOrigin::Start);
 
     eastl::vector<MyStruct> out;
     serializer >> out;
@@ -98,7 +98,7 @@ TEST_F(TestBinarySerializer, VectorRoundTrip_Serializable) {
 TEST_F(TestBinarySerializer, OptionalRoundTrip) {
     eastl::optional<int32_t> in = 999;
     serializer << in;
-    mem.Seek(0);
+    mem.Seek(0, StreamOrigin::Start);
 
     eastl::optional<int32_t> out;
     serializer >> out;
@@ -110,7 +110,7 @@ TEST_F(TestBinarySerializer, OptionalRoundTrip) {
 TEST_F(TestBinarySerializer, OptionalEmptyRoundTrip) {
     eastl::optional<int32_t> in = eastl::nullopt;
     serializer << in;
-    mem.Seek(0);
+    mem.Seek(0, StreamOrigin::Start);
 
     eastl::optional<int32_t> out = 123; // start with value
     serializer >> out;
@@ -121,7 +121,7 @@ TEST_F(TestBinarySerializer, OptionalEmptyRoundTrip) {
 TEST_F(TestBinarySerializer, EmptyVector) {
     eastl::vector<int> in;
     serializer << in;
-    mem.Seek(0);
+    mem.Seek(0, StreamOrigin::Start);
 
     eastl::vector<int> out;
     serializer >> out;
@@ -132,7 +132,7 @@ TEST_F(TestBinarySerializer, EmptyVector) {
 TEST_F(TestBinarySerializer, FixedArrayExactSize) {
     eastl::array<int, 3> in = { 1, 2, 3 };
     serializer << in;
-    mem.Seek(0);
+    mem.Seek(0, StreamOrigin::Start);
 
     eastl::array<int, 3> out{};
     serializer >> out;
@@ -143,7 +143,7 @@ TEST_F(TestBinarySerializer, FixedArrayExactSize) {
 TEST_F(TestBinarySerializer, FixedArraySizeMismatchThrows) {
     eastl::array<int, 3> in = { 1, 2, 3 };
     serializer << in;
-    mem.Seek(0);
+    mem.Seek(0, StreamOrigin::Start);
 
     eastl::array<int, 4> out{}; // mismatch — should throw
     EXPECT_THROW(serializer >> out, std::runtime_error);
@@ -152,7 +152,7 @@ TEST_F(TestBinarySerializer, FixedArraySizeMismatchThrows) {
 TEST_F(TestBinarySerializer, OptionalEmpty) {
     eastl::optional<int> in{};
     serializer << in;
-    mem.Seek(0);
+    mem.Seek(0, StreamOrigin::Start);
 
     eastl::optional<int> out = 5; // start with value
     serializer >> out;
@@ -164,7 +164,7 @@ TEST_F(TestBinarySerializer, OptionalWithValue) {
     eastl::optional<int> in = 42;
     serializer << in;
 
-    mem.Seek(0);
+    mem.Seek(0, StreamOrigin::Start);
     eastl::optional<int> out;
     serializer >> out;
 
@@ -176,7 +176,7 @@ TEST_F(TestBinarySerializer, OptionalWithValue) {
 TEST_F(TestBinarySerializer, StringEmpty) {
     eastl::string in{};
     serializer << in;
-    mem.Seek(0);
+    mem.Seek(0, StreamOrigin::Start);
 
     eastl::string out = "bla"; // start with value
     serializer >> out;
@@ -187,7 +187,7 @@ TEST_F(TestBinarySerializer, StringEmpty) {
 TEST_F(TestBinarySerializer, StringValid) {
     eastl::string in = "Hello world! 1234";
     serializer << in;
-    mem.Seek(0);
+    mem.Seek(0, StreamOrigin::Start);
     eastl::string out{};
     serializer >> out;
 
@@ -204,7 +204,7 @@ TEST_F(TestBinarySerializer, LargeVectorBulkWrite) {
 
     serializer << in;
 
-    mem.Seek(0);
+    mem.Seek(0, StreamOrigin::Start);
     eastl::vector<uint64_t> out;
     serializer >> out;
 
@@ -221,7 +221,7 @@ TEST_F(TestBinarySerializer, StressTest) {
     };
 
     serializer << in;
-    mem.Seek(0);
+    mem.Seek(0, StreamOrigin::Start);
     eastl::vector<eastl::array<eastl::optional<eastl::string>, 4>> out{};
     serializer >> out;
 
@@ -245,7 +245,7 @@ TEST_F(TestBinarySerializer, BasicSerialization_Map) {
     serializer << original;
 
     eastl::map<int, float> loaded;
-    mem.Seek(0);
+    mem.Seek(0, StreamOrigin::Start);
     serializer >> loaded;
 
     EXPECT_EQ(original.size(), loaded.size());
@@ -264,7 +264,7 @@ TEST_F(TestBinarySerializer, BasicSerialization_UnorderedMap) {
     serializer << original;
 
     eastl::unordered_map<eastl::string, int> loaded;
-    mem.Seek(0);
+    mem.Seek(0, StreamOrigin::Start);
     serializer >> loaded;
 
     EXPECT_EQ(original.size(), loaded.size());
@@ -281,7 +281,7 @@ TEST_F(TestBinarySerializer, EmptyMap) {
     serializer << original;
 
     eastl::unordered_map<int, int> loaded;
-    mem.Seek(0);
+    mem.Seek(0, StreamOrigin::Start);
     serializer >> loaded;
 
     EXPECT_TRUE(loaded.empty());
@@ -296,7 +296,7 @@ TEST_F(TestBinarySerializer, SingleElement_Map) {
     serializer << original;
 
     eastl::map<int, eastl::string> loaded;
-    mem.Seek(0);
+    mem.Seek(0, StreamOrigin::Start);
     serializer >> loaded;
 
     ASSERT_EQ(loaded.size(), 1u);
@@ -321,7 +321,7 @@ TEST_F(TestBinarySerializer, StressTest_UnorderedMap) {
     serializer << original;
 
     eastl::unordered_map<int, float> loaded;
-    mem.Seek(0);
+    mem.Seek(0, StreamOrigin::Start);
     serializer >> loaded;
 
     EXPECT_EQ(original.size(), loaded.size());

@@ -21,21 +21,16 @@
 // SOFTWARE.
 
 #pragma once
-#include <PyroCommon/Core.hpp>
+#include "IStreamBase.hpp"
 namespace PyroshockStudios {
-    struct IStreamReader {
+    struct IStreamReader : public IStreamBase {
         IStreamReader() = default;
         virtual ~IStreamReader() = default;
 
-        // Read and advance
-        virtual void Read(void* out, usize size) = 0;
-
-        // Read and advance
-        virtual void ReadToEnd(void* out) = 0;
-
-        // Gets size of the stream size. Note: for IO streams such as file streams, this can cause a block!
-        PYRO_NODISCARD virtual usize StreamSize() = 0;
-
-        virtual bool IsEndOfStream() = 0;
+        /// Reads data from a previously opened file.
+        /// @param buffer The buffer to be read into.
+        /// @param size The number of bytes to read into the buffer.
+        /// @return The total number of bytes read into the buffer.
+        PYRO_NODISCARD virtual usize Read(void* out, usize size) = 0;
     };
 } // namespace PyroshockStudios
