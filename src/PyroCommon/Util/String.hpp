@@ -27,7 +27,7 @@
 
 namespace PyroshockStudios {
     inline namespace Util {
-        eastl::vector<eastl::string> StringSplit(const eastl::string& input, char delimiter) {
+        static eastl::vector<eastl::string> StringSplit(const eastl::string& input, char delimiter) {
             eastl::vector<eastl::string> result;
             usize start = 0;
             usize pos = 0;
@@ -44,7 +44,7 @@ namespace PyroshockStudios {
 
             return result;
         }
-        eastl::vector<eastl::string> StringSplit(const eastl::string& input, char delimiter, char quote, char escapeMarker = '\\') {
+        static eastl::vector<eastl::string> StringSplit(const eastl::string& input, char delimiter, char quote, char escapeMarker = '\\') {
             eastl::vector<eastl::string> tokens;
             eastl::string current;
             bool inQuotes = false;
