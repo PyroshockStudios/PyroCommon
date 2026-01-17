@@ -33,7 +33,7 @@ namespace PyroshockStudios {
     }
     usize MemoryStream::Write(const void* bytes, usize size) {
         const u8* src = static_cast<const u8*>(bytes);
-        mBuffer.insert(mBuffer.end(), src, src + size);
+        mBuffer.insert(mBuffer.begin() + mPosition, src, src + size);
         mPosition += size;
         return size;
     }
@@ -44,6 +44,7 @@ namespace PyroshockStudios {
         mPosition += readSize;
         return readSize;
     }
+
 
     bool MemoryStream::Seek(isize offset, StreamOrigin origin) {
         switch (origin) {
