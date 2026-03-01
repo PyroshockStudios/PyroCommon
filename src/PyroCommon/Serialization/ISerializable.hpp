@@ -26,7 +26,8 @@ namespace PyroshockStudios {
     class BinarySerializer;
     struct PYRO_NO_VTABLE ISerializable {
         ISerializable() = default;
-
+        PYRO_FORCEINLINE bool operator==(const ISerializable&) const = default;
+        PYRO_FORCEINLINE bool operator!=(const ISerializable&) const = default;
         virtual void Serialize(BinarySerializer& serializer) const = 0;
         virtual void Deserialize(BinarySerializer& serializer) = 0;
     };
