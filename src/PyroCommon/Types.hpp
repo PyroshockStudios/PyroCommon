@@ -66,17 +66,17 @@ namespace PyroshockStudios {
             inline bool operator==(const Size& point) const = default;
             inline bool operator!=(const Size& point) const = default;
         };
-        struct FPoint {
+        struct Pointf {
             f32 x = {};
             f32 y = {};
-            inline bool operator==(const FPoint& point) const = default;
-            inline bool operator!=(const FPoint& point) const = default;
+            inline bool operator==(const Pointf& point) const = default;
+            inline bool operator!=(const Pointf& point) const = default;
         };
-        struct FSize {
+        struct Sizef {
             f32 width = {};
             f32 height = {};
-            inline bool operator==(const FSize& point) const = default;
-            inline bool operator!=(const FSize& point) const = default;
+            inline bool operator==(const Sizef& point) const = default;
+            inline bool operator!=(const Sizef& point) const = default;
         };
     } // namespace Types
 } // namespace PyroshockStudios

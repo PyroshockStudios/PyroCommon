@@ -102,9 +102,7 @@ namespace PyroshockStudios {
 
         PYRO_NODISCARD PYRO_FORCEINLINE constexpr auto operator<=>(const Flags& other) const = default;
 
-        PYRO_FORCEINLINE constexpr operator bool() const noexcept {
-            return data != 0;
-        }
+        PYRO_NODISCARD PYRO_FORCEINLINE constexpr operator Properties::Data() const noexcept { return data; }
     };
     template <typename... Ts>
     struct Union;

@@ -47,7 +47,6 @@ gtest_discover_tests(TestsCommon)
 
 target_link_libraries(TestsCommon
   PyroCommon::PyroCommon
-  GTest::gmock
   GTest::gtest_main
   GTest::gmock_main
   )
