@@ -121,7 +121,7 @@ namespace PyroshockStudios {
 
         template <typename U>
         Union(const U& v) : next(v) {}
-        Union(const T& v) value(v) {}
+        Union(const T& v) : value(v) {}
 
         template <typename U>
         Union& operator=(const U& v) {
