@@ -71,6 +71,25 @@
 
 #endif
 
+/* Architecture families */
+#if defined(__x86_64__) || defined(_M_X64) || defined(__amd64__)
+#define PYRO_PLATFORM_X86_64 1
+#endif
+#if defined(__i386__) || defined(_M_IX86)
+#define PYRO_PLATFORM_X86 1
+#endif
+#if defined(__aarch64__) || defined(_M_ARM64)
+#define PYRO_PLATFORM_ARM64 1
+#endif
+#if defined(__arm__) || defined(_M_ARM)
+#define PYRO_PLATFORM_ARM 1
+#endif
+#if defined(__riscv)
+#define PYRO_PLATFORM_RISCV 1
+#endif
+#if defined(__powerpc__) || defined(__ppc__) || defined(__PPC__)
+#define PYRO_PLATFORM_PPC 1
+#endif
 
 // Default to 0
 #ifndef PYRO_PLATFORM_32_BIT
