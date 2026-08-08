@@ -23,7 +23,7 @@
 #pragma once
 
 #include <EASTL/string.h>
-#include <EASTL/unordered_map.h>
+#include <EASTL/string_map.h>
 #include <EASTL/vector.h>
 
 #include <PyroCommon/Core.hpp>
@@ -52,8 +52,18 @@ namespace PyroshockStudios {
             // Checks if a key was provided
             bool HasOption(const eastl::string& key) const;
 
+            // Modifies the options by parsing the value again. Returns true if the value exists.
+            bool OverrideOption(const eastl::string& key, const eastl::string& value);
+
+            template <typename Fn>
+            void QueryOptions(Fn&& fn) {
+                for (const auto& kv : mOptions) {
+                    fn(kv.first, kv.second);
+                }
+            }
+
         private:
-            eastl::unordered_map<eastl::string, eastl::string> mOptions;
+            eastl::string_map<eastl::string> mOptions;
 
             inline bool ParseArg(eastl::string& arg);
             void ParseArguments(const eastl::vector<eastl::string>& keyValues);

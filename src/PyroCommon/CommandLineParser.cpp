@@ -34,12 +34,12 @@
 namespace PyroshockStudios {
     inline namespace Util {
         eastl::string CommandLineParser::GetOption(const eastl::string& key, const eastl::string& defaultValue) const {
-            auto it = mOptions.find(key);
+            auto it = mOptions.find(key.c_str());
             return (it != mOptions.end()) ? it->second : defaultValue;
         }
 
         i64 CommandLineParser::GetIntOption(const eastl::string& key, i64 defaultValue) const {
-            auto it = mOptions.find(key);
+            auto it = mOptions.find(key.c_str());
             if (it != mOptions.end()) {
                 const eastl::string& val = it->second;
                 char* endPtr = nullptr;
@@ -52,7 +52,7 @@ namespace PyroshockStudios {
         }
 
         bool CommandLineParser::GetBoolOption(const eastl::string& key, bool defaultValue) const {
-            auto it = mOptions.find(key);
+            auto it = mOptions.find(key.c_str());
             if (it != mOptions.end()) {
                 eastl::string val = it->second;
                 eastl::transform(val.begin(), val.end(), val.begin(), [](char c) { return static_cast<char>(tolower(c)); });
@@ -62,7 +62,7 @@ namespace PyroshockStudios {
         }
 
         eastl::vector<eastl::string> CommandLineParser::GetArrayOption(const eastl::string& key, const eastl::vector<eastl::string>& defaultValue) const {
-            auto it = mOptions.find(key);
+            auto it = mOptions.find(key.c_str());
             if (it != mOptions.end()) {
                 const auto& input = it->second;
                 eastl::vector<eastl::string> tokens;
@@ -96,7 +96,17 @@ namespace PyroshockStudios {
         }
 
         bool CommandLineParser::HasOption(const eastl::string& key) const {
-            return mOptions.find(key) != mOptions.end();
+            return mOptions.find(key.c_str()) != mOptions.end();
+        }
+
+        bool CommandLineParser::OverrideOption(const eastl::string& key, const eastl::string& value) {
+            auto it = mOptions.find(key.c_str());
+            if (it == mOptions.end()) {
+                mOptions[key.c_str()] = value;
+                return false;
+            }
+            it->second = value;
+            return true;
         }
 
 
@@ -116,9 +126,9 @@ namespace PyroshockStudios {
                     }
 
                     if (!key.empty())
-                        mOptions[key] = value;
+                        mOptions[key.c_str()] = value;
                 } else {
-                    mOptions[arg] = eastl::string(); // Flag without value
+                    mOptions[arg.c_str()] = eastl::string(); // Flag without value
                 }
             }
             return true;
