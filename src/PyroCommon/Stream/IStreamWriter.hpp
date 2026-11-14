@@ -23,7 +23,7 @@
 #pragma once
 #include "IStreamBase.hpp"
 namespace PyroshockStudios {
-    struct IStreamWriter : public IStreamBase {
+    struct IStreamWriter : virtual public IStreamBase {
         IStreamWriter() = default;
         virtual ~IStreamWriter() = default;
 
